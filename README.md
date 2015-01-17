@@ -8,5 +8,8 @@ Note:
 I am using data that has Zips instead of Fips, So i needed to change the zips to fips. Also data has some invalid data, they all being cleaned as well.
 
 
+![sample](https://cloud.githubusercontent.com/assets/7586229/5786965/d6363366-9da3-11e4-9f68-04b0349be201.png)
+
+
 
 
