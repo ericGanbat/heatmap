@@ -4,33 +4,31 @@ import csv
 import bs4
 
 
-
-
-	#lookup table import
+#Import lookup table
 df_lookup =pd.read_csv('zipfile.csv', thousands=',')
 
-	#data import
+#Import data
 df_data=pd.read_csv('datafile.csv', thousands=',')
 
 df_data=df_data.dropna()
 df_lookup=df_lookup.dropna()
 df_data.columns=['postal_code','Ad_server_impressions']
 
-	#data cleaning deleting last rows and non zip rows
+#Clean the data, delete last row and non-zips
 df_data=df_data[df_data.postal_code.str.len()>3]
 df_data=df_data.drop(df_data.tail(1).index)
 
-	#reformatting 4 digit zipcodes to 5 digits with leading zero
+#Rreformat 4 digit zipcodes to 5 digits with leading zero
 df_lookup['zips'] = df_lookup['zips'].apply(lambda x: '{0:0>5}'.format(x))
 df_data['postal_code'] = df_data['postal_code'].apply(lambda x: '{0:0>5}'.format(x))
 df_lookup['fips'] = df_lookup['fips'].apply(lambda x: '{0:0>5}'.format(x))
 
-	#joining data with lookup table
+#Join the tables
 a=pd.merge(df_data, df_lookup, how='left',left_on = ['postal_code'], right_on =['zips'])
 grouped_data=a.groupby('fips')
 grouped_data=grouped_data.sum().reset_index(level=1)
 
-	#assigning colors boundary
+#Assignt color boundary
 a0=float(grouped_data.quantile(0.40))
 a1=float(grouped_data.quantile(0.50))
 a2=float(grouped_data.quantile(0.65))
